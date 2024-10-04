@@ -11,7 +11,6 @@ interface TaskContextType {
   addTask: (task: Task) => void;
   deleteTask: (taskId: number) => void;
   toggleComplete: (taskId: number) => void;
-  setTasks: (tasks: Task[]) => void;
 }
 
 const initialTasks: Task[] = [];
@@ -39,21 +38,29 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
 
   useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    dispatch({ type: "SET_TASKS", payload: storedTasks });
+    const storedTasksString = localStorage.getItem("tasks");
+    if (storedTasksString) {
+      try {
+        const storedTasks: Task[] = JSON.parse(storedTasksString);
+        dispatch({ type: "SET_TASKS", payload: storedTasks });
+      } catch (error) {
+        console.error("Failed to parse tasks from local storage:", error);
+      }
+    }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if (tasks.length > 0) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
   }, [tasks]);
 
   const addTask = (task: Task) => dispatch({ type: "ADD_TASK", payload: task });
   const deleteTask = (taskId: number) => dispatch({ type: "DELETE_TASK", payload: taskId });
   const toggleComplete = (taskId: number) => dispatch({ type: "TOGGLE_COMPLETE", payload: taskId });
-  const setTasks = (tasks: Task[]) => dispatch({ type: "SET_TASKS", payload: tasks });
 
   return (
-    <TaskContext.Provider value={{ tasks, addTask, deleteTask, toggleComplete, setTasks }}>
+    <TaskContext.Provider value={{ tasks, addTask, deleteTask, toggleComplete }}>
       {children}
     </TaskContext.Provider>
   );
