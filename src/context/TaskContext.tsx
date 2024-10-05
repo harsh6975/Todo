@@ -49,9 +49,10 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
   const [filter, setFilter] = useState<ButtonState>(ButtonState.All);
   const [search, setSearch] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>(search);
 
   const filteredTasks = tasks.filter((task) => {
-    const matchesSearch = task.text.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch = task.text.toLowerCase().includes(debouncedSearch.toLowerCase());
     if (filter === ButtonState.Completed) {
       return task.completed && matchesSearch;
     }
@@ -60,6 +61,17 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     return matchesSearch;
   });
+
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300); 
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]); 
 
   useEffect(() => {
     const storedTasksString = localStorage.getItem("tasks");
