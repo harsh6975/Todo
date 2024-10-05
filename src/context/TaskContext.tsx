@@ -1,15 +1,10 @@
 import React, { createContext, useReducer, ReactNode, useEffect, useState } from "react";
+import { ButtonState } from "../components/constants/enum";
 
 interface Task {
   id: number;
   text: string;
   completed: boolean;
-}
-
-enum ButtonState {
-  "All",
-  "Completed",
-  "Incomplete"
 }
 
 interface TaskContextType {

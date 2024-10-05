@@ -3,12 +3,8 @@ import { TaskContext } from "../context/TaskContext";
 import style from '../assets/css/Home.module.css';
 import SearchIcon from '@mui/icons-material/Search';
 import TaskList from "./TaskList";
+import { ButtonState } from "./constants/enum";
 
-enum ButtonState {
-  "All",
-  "Completed",
-  "Incomplete"
-}
 
 const Home: React.FC = () => {
   const { addTask, setFilter,filter, search, setSearch } = useContext(TaskContext) || {};
