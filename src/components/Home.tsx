@@ -16,9 +16,13 @@ const Home: React.FC = () => {
   const [taskText, setTaskText] = useState<string>("");
   const [buttonState, setButtonState] = useState<ButtonState>(ButtonState.All);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [error, setError] = useState<string>("")
 
   const handleSubmit = () => {
-    if (!taskText.trim()) return;
+    if (!taskText.trim()){
+      setError("Task cann't be empty!!");
+       return;
+    }
 
     const newTask = {
       id: Date.now(),
@@ -55,7 +59,8 @@ const Home: React.FC = () => {
           </div>
         </div>
         <TaskList/>
-        <input type="text" placeholder="Type Something" onChange={(e) => setTaskText(e.target.value)} className={style.textInput} value={taskText}></input>
+        <input type="text" placeholder="Type Something" onChange={(e) => {setTaskText(e.target.value);setError("")}} className={`${style.textInput} ${error? style.textInputError:""}`} value={taskText}></input>
+        {error && <p className={style.error}>{error}</p>}
         <button onClick={handleSubmit} className={style.addButton}>Add Task</button>
       </div>
     </div>
