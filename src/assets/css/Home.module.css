@@ -1,6 +1,5 @@
 .home {
     background-color: white;
-    min-height: 75vh;
     margin: auto;
     margin-top: 100px;
     border-radius: 8px;
@@ -18,17 +17,17 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 40px;
     width: 100%;
 }
 
 .heading p{
-    font-size: 24px;
-    font-weight: 600;
-    margin-right: 10px;
+    font-size: 22px;
+    font-weight: 500;
+    margin-right: 5px;
 }
 
 .search_input {
+    flex:2;
     position: relative;
     display: flex;
     align-items: center;
@@ -43,7 +42,7 @@
 
 .input_field {
     padding: 8px 12px 8px 35px; 
-    width: 450px;
+    width: 100%;
     border: 1px solid #ccc;
     border-radius: 40px;
     outline: none;
@@ -58,7 +57,6 @@
     color: white;
     padding: 5px;
     margin-left: 5px;
-    margin-right: 5px;
     border: 0px;
     min-width: 40px;
     cursor: pointer;
@@ -85,20 +83,14 @@
     height: 35px;
 }
 
-.textarea{
-    width: 95%;
-    margin-bottom:10px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc
-}
-
 .textInput{
-    width: 98%;
-    padding: 8px;
+    width: 100%;
     border: 1px solid gray;
     margin-top: 10px;
     border-radius: 5px;
+    height: 33px;
+    padding-left: 5px;
+    box-sizing: border-box;
 }
 
 .textInputError{
@@ -108,4 +100,26 @@
 .error{
     color:rgb(250, 65, 65);
     font-size: 14px;
+}
+
+@media screen and (max-width:768px) {
+    .content{
+        width: 80%;
+    }
+    .heading{
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-start;
+    }
+    .heading p{
+        margin-bottom: 5px;
+    }
+    .search_input{
+        min-width: 100%;
+    }
+    .button{
+        margin-left: 0;
+        margin-right: 5px;
+        margin-top: 10px;
+    }
 }
