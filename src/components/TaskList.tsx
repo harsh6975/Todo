@@ -7,7 +7,7 @@ import style from '../assets/css/Task.module.css';
 
 
 const TaskList: React.FC = () => {
-  const { tasks, toggleComplete, deleteTask } = useContext(TaskContext) || { tasks: [] };
+  const { filteredTasks, toggleComplete, deleteTask } = useContext(TaskContext) || { tasks: [] };
 
   const handleClick = useCallback((e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -26,7 +26,7 @@ const TaskList: React.FC = () => {
 
   return (
     <div className={style.home} onClick={handleClick}>
-      {tasks.map((task) => (
+      {filteredTasks?.map((task) => (
         <div
           key={task.id}
           data-task-id={task.id}

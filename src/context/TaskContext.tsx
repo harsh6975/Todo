@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, ReactNode, useEffect } from "react";
+import React, { createContext, useReducer, ReactNode, useEffect, useState } from "react";
 
 interface Task {
   id: number;
@@ -6,11 +6,22 @@ interface Task {
   completed: boolean;
 }
 
+enum ButtonState {
+  "All",
+  "Completed",
+  "Incomplete"
+}
+
 interface TaskContextType {
   tasks: Task[];
+  filteredTasks: Task[];
+  filter: ButtonState;
+  search: string;
   addTask: (task: Task) => void;
   deleteTask: (taskId: number) => void;
   toggleComplete: (taskId: number) => void;
+  setFilter: (filter: ButtonState) => void;
+  setSearch: (search: string) => void;
 }
 
 const initialTasks: Task[] = [];
@@ -36,6 +47,19 @@ const taskReducer = (state: Task[], action: any) => {
 
 export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
+  const [filter, setFilter] = useState<ButtonState>(ButtonState.All);
+  const [search, setSearch] = useState<string>('');
+
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.text.toLowerCase().includes(search.toLowerCase());
+    if (filter === ButtonState.Completed) {
+      return task.completed && matchesSearch;
+    }
+    if (filter === ButtonState.Incomplete) {
+      return !task.completed && matchesSearch;
+    }
+    return matchesSearch;
+  });
 
   useEffect(() => {
     const storedTasksString = localStorage.getItem("tasks");
@@ -58,7 +82,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const toggleComplete = (taskId: number) => dispatch({ type: "TOGGLE_COMPLETE", payload: taskId });
 
   return (
-    <TaskContext.Provider value={{ tasks, addTask, deleteTask, toggleComplete }}>
+    <TaskContext.Provider value={{ tasks, addTask, deleteTask, toggleComplete, filteredTasks, filter, setFilter, search, setSearch }}>
       {children}
     </TaskContext.Provider>
   );

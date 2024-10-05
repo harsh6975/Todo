@@ -1,4 +1,3 @@
-// src/App.tsx
 import React, { useState, useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
 import style from '../assets/css/Home.module.css';
@@ -12,10 +11,8 @@ enum ButtonState {
 }
 
 const Home: React.FC = () => {
-  const { addTask } = useContext(TaskContext) || {};
+  const { addTask, setFilter,filter, search, setSearch } = useContext(TaskContext) || {};
   const [taskText, setTaskText] = useState<string>("");
-  const [buttonState, setButtonState] = useState<ButtonState>(ButtonState.All);
-  const [searchValue, setSearchValue] = useState<string>("");
   const [error, setError] = useState<string>("")
 
   const handleSubmit = () => {
@@ -34,7 +31,7 @@ const Home: React.FC = () => {
   };
 
   const handleFilter = (state: ButtonState) => {
-    setButtonState(state);
+    setFilter!(state);
   };
 
   return (
@@ -46,16 +43,16 @@ const Home: React.FC = () => {
             <SearchIcon className={style.search_icon} />
             <input
               type="text"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              value={search}
+              onChange={(e) => setSearch!(e.target.value)}
               placeholder="Search"
               className={style.input_field}
             />
           </div>
           <div className={style.filter}>
-            <button className={`${style.button} ${buttonState === ButtonState.All ? style.button_active : ""}`} onClick={() => handleFilter(ButtonState.All)}>All</button>
-            <button className={`${style.button} ${buttonState === ButtonState.Completed ? style.button_active : ""}`} onClick={() => handleFilter(ButtonState.Completed)}>Completed</button>
-            <button className={`${style.button} ${buttonState === ButtonState.Incomplete ? style.button_active : ""}`} onClick={() => handleFilter(ButtonState.Incomplete)}>Incomplete</button>
+            <button className={`${style.button} ${filter === ButtonState.All ? style.button_active : ""}`} onClick={() => handleFilter(ButtonState.All)}>All</button>
+            <button className={`${style.button} ${filter === ButtonState.Completed ? style.button_active : ""}`} onClick={() => handleFilter(ButtonState.Completed)}>Completed</button>
+            <button className={`${style.button} ${filter === ButtonState.Incomplete ? style.button_active : ""}`} onClick={() => handleFilter(ButtonState.Incomplete)}>Incomplete</button>
           </div>
         </div>
         <TaskList/>
